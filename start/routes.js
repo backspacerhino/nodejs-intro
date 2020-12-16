@@ -2,10 +2,17 @@ const route = require("../Core/Route/Route")
 
 const Route = route.getInstance()
 
-Route.register("GET", "bla", function(){
-    return "ej ti"
+Route.get("orders", function () {
+    return [{
+        id: 5,
+        name: "dildo"
+    }, {
+        id: 101,
+        name: "caj"
+    }
+    ]
 })
 
-Route.register("GET", "renato", function () {
+Route.post("renato", function () {
     return "+ katarina"
 })

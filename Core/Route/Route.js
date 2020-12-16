@@ -27,6 +27,24 @@ class Route {
 
         return func()
     }
+
+
+    get(endpoint, callback) {
+        this.register("GET", endpoint, callback)
+    }
+    post(endpoint, callback) {
+        this.register("POST", endpoint, callback)
+    }
+    put(endpoint, callback) {
+        this.register("PUT", endpoint, callback)
+    }
+    patch(endpoint, callback) {
+        this.register("PATCH", endpoint, callback)
+    }
+    delete(endpoint, callback) {
+        this.register("DELETE", endpoint, callback)
+    }
+
 }
 
 module.exports = Route
