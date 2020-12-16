@@ -14,35 +14,50 @@ class Route {
         return this._instance
     }
 
-    register(method, endpoint, callback) {
-        this._map.set(`${method + endpoint}`, callback)
+    register(method, endpoint, handler) {
+        this._map.set(`${method + endpoint}`, handler)
     }
 
-    resolve(method, endpoint) {
-        const func = this._map.get(`${method + endpoint}`)
-
-        if (!func) {
+    async resolve(method, endpoint) {
+        const handler = this._map.get(`${method + endpoint}`)
+        
+        if (!handler) {
             throw new Error(`Handler ${method + endpoint} ne postoji.`)
         }
 
-        return func()
+        const explodedHandler = handler.split(".")
+
+        let handlerClass
+        try {
+            handlerClass = new (require(`../../Controllers/${explodedHandler[0]}`))()
+        } catch (error) {
+            console.log("Nije uspilo u inicijaliziaCIJI KLASE");
+        }
+        
+        try {
+            return await handlerClass[explodedHandler[1]]()
+        } catch (error) {
+            console.log("Nije uspilo u funkciji");
+        }
+
+       
     }
 
 
-    get(endpoint, callback) {
-        this.register("GET", endpoint, callback)
+    get(endpoint, handler) {
+        this.register("GET", endpoint, handler)
     }
-    post(endpoint, callback) {
-        this.register("POST", endpoint, callback)
+    post(endpoint, handler) {
+        this.register("POST", endpoint, handler)
     }
-    put(endpoint, callback) {
-        this.register("PUT", endpoint, callback)
+    put(endpoint, handler) {
+        this.register("PUT", endpoint, handler)
     }
-    patch(endpoint, callback) {
-        this.register("PATCH", endpoint, callback)
+    patch(endpoint, handler) {
+        this.register("PATCH", endpoint, handler)
     }
-    delete(endpoint, callback) {
-        this.register("DELETE", endpoint, callback)
+    delete(endpoint, handler) {
+        this.register("DELETE", endpoint, handler)
     }
 
 }
